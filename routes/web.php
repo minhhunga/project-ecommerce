@@ -11,8 +11,14 @@ Route::group([
     'namespace' => 'App\Http\Controllers\Frontend',
 ], function () {
     Route::get('/home', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
+
     Route::get('/register', [App\Http\Controllers\Frontend\MemberController::class, 'register']);
+    Route::post('/register', [App\Http\Controllers\Frontend\MemberController::class, 'PostRegister'])->name('register.post');
+
     Route::get('/login', [App\Http\Controllers\Frontend\MemberController::class, 'login']);
+    Route::post('/login', [App\Http\Controllers\Frontend\MemberController::class, 'PostLogin'])->name('login.post');
+    
+    Route::get('/logout', [App\Http\Controllers\Frontend\MemberController::class, 'logout']);
 });
 
 Auth::routes();

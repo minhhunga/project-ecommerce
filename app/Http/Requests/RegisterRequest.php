@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             'phone' => 'required|string|max:15',
-            'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -45,10 +45,21 @@ class RegisterRequest extends FormRequest
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
             'phone.required' => 'Số điện thoại không được để trống.',
             'phone.string' => 'Số điện thoại phải là một chuỗi.',
-            'phone.max' => 'Số điện thoại không được vượt quá 15 số.',
+            'phone.max' => 'Số điện thoại không được vượt quá 10 số.',
             'avatar.image' => 'Ảnh đại diện phải là một hình ảnh.',
-            'avatar.mimes' => 'Ảnh đại diện phải có định dạng: jpeg, png, jpg, gif.',
+            'avatar.mimes' => 'Ảnh đại diện phải có định dạng: jpeg, png, jpg, gif, svg.',
             'avatar.max' => 'Ảnh đại diện không được vượt quá 2MB.',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'Tên',
+            'email' => 'Email',
+            'password' => 'Mật khẩu',
+            'phone' => 'Số điện thoại',
+            'avatar' => 'Ảnh đại diện',
         ];
     }
 }

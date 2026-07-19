@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
-use App\Http\Requests\MemberRequest;
-use App\Models\Member;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Models\User;
 
 class MemberController extends Controller
 {
@@ -19,9 +20,29 @@ class MemberController extends Controller
         return view('frontend.member.register');
     }
 
-    public function PostRegister(MemberRequest $request)
+    public function PostRegister(RegisterRequest $request)
     {
+        $data = $request->all();
+        $file = $request->file('avatar');
         
+        if(!empty($file)){
+            $fileName = $file->getClientOriginalName();
+            $data['avatar'] = $fileName;
+        }
+
+        $data['password'] = bcrypt($data['password']);
+        $data['level'] = 0;
+        if(User::create($data)){
+
+            if(!empty($file)){
+                $file->move(public_path('upload/user/avatar'), $fileName);
+            }
+            return redirect()->back()->with('success', 'Đăng ký thành công. Vui lòng đăng nhập.');
+            
+        } else {
+            return redirect()->back()->with('error', 'Đăng ký thất bại. Vui lòng thử lại.');
+        }
+
     }
 
     /**
@@ -32,10 +53,32 @@ class MemberController extends Controller
         return view('frontend.member.login');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-  
+    public function PostLogin(LoginRequest $request)
+    {
+        $login = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'level' => 0
+        ];
+
+        $remember = false;
+
+        if($request->remember_me){
+            $remember = true;
+        }
+
+        if(Auth::attempt($login, $remember)){
+            return redirect('frontend/home')->with('successfull', 'Đăng nhập thành công.');
+        }else{
+            return redirect()->back()->withErrors('Email hoặc mật khẩu không đúng');
+        }
+    }
+    
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('login.post');
+    }
 
     /**
      * Display the specified resource.
