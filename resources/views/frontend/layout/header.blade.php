@@ -91,7 +91,7 @@
 					</div>
 					<div class="mainmenu pull-left">
 						<ul class="nav navbar-nav collapse navbar-collapse">
-							<li><a href="index.html" class="active">Home</a></li>
+							<li><a href="{{ url('/home') }}" class="active">Home</a></li>
 							<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
 								<ul role="menu" class="sub-menu">
 									<li><a href="shop.html">Products</a></li>
@@ -103,7 +103,7 @@
 							</li> 
 							<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
 								<ul role="menu" class="sub-menu">
-									<li><a href="blog.html">Blog List</a></li>
+									<li><a href="{{ url('frontend/blog/list') }}">Blog List</a></li>
 									<li><a href="blog-single.html">Blog Single</a></li>
 								</ul>
 							</li> 

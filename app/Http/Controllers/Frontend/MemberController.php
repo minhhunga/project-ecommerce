@@ -24,23 +24,22 @@ class MemberController extends Controller
     {
         $data = $request->all();
         $file = $request->file('avatar');
-        
+
         if(!empty($file)){
-            $fileName = $file->getClientOriginalName();
-            $data['avatar'] = $fileName;
+            $fileName = time().'_'. $file->getClientOriginalName();
+            $data['avatar'] = $fileName;        
         }
 
         $data['password'] = bcrypt($data['password']);
         $data['level'] = 0;
-        if(User::create($data)){
 
+        if(User::create($data)){
             if(!empty($file)){
                 $file->move(public_path('upload/user/avatar'), $fileName);
-            }
-            return redirect()->back()->with('success', 'Đăng ký thành công. Vui lòng đăng nhập.');
-            
-        } else {
-            return redirect()->back()->with('error', 'Đăng ký thất bại. Vui lòng thử lại.');
+        }   
+            return redirect()->back()->with('successfull', 'Đăng ký thành công. Vui lòng đăng nhập để tiếp tục.');
+        }else{
+            return redirect()->back()->withErrors('Đăng ký thất bại. Vui lòng thử lại.');
         }
 
     }
@@ -77,7 +76,7 @@ class MemberController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login.post');
+        return redirect('/login');
     }
 
     /**

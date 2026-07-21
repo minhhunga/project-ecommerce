@@ -19,6 +19,9 @@ Route::group([
     Route::post('/login', [App\Http\Controllers\Frontend\MemberController::class, 'PostLogin'])->name('login.post');
     
     Route::get('/logout', [App\Http\Controllers\Frontend\MemberController::class, 'logout']);
+
+    Route::get('/blog/list', [App\Http\Controllers\Frontend\BlogController::class, 'list']);
+    Route::get('/blog/detail', [App\Http\Controllers\Frontend\BlogController::class, 'detail']);
 });
 
 Auth::routes();
