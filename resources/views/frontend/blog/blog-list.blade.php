@@ -20,11 +20,11 @@
                             <i class="fa fa-star-half-o"></i>
                     </span>
                 </div>
-                <a href="">
+                <a href="{{ url('frontend/blog/detail/' .$item->id)  }}">
                     <img src="{{ asset('uploads/blog/' . $item->image) }}" alt="">
                 </a>
                 <p>{{ $item->description }}</p>
-                <a  class="btn btn-primary" href="">Read More</a>
+                <a  class="btn btn-primary" href="{{ url('frontend/blog/detail/' .$item->id)  }}">Read More</a>
             </div>
             @endforeach
             <div class="pagination-area text-center">

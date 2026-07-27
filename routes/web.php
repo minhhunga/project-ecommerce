@@ -10,26 +10,42 @@ Route::group([
     'prefix' => 'frontend',
     'namespace' => 'App\Http\Controllers\Frontend',
 ], function () {
+
     Route::get('/home', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
-
-    Route::get('/register', [App\Http\Controllers\Frontend\MemberController::class, 'register']);
-    Route::post('/register', [App\Http\Controllers\Frontend\MemberController::class, 'PostRegister'])->name('register.post');
-
-    Route::get('/login', [App\Http\Controllers\Frontend\MemberController::class, 'login']);
-    Route::post('/login', [App\Http\Controllers\Frontend\MemberController::class, 'PostLogin'])->name('login.post');
     
-    Route::get('/logout', [App\Http\Controllers\Frontend\MemberController::class, 'logout']);
-
+    //blog
     Route::get('/blog/list', [App\Http\Controllers\Frontend\BlogController::class, 'list']);
-    Route::get('/blog/detail', [App\Http\Controllers\Frontend\BlogController::class, 'detail']);
+    Route::get('/blog/detail/{id}', [App\Http\Controllers\Frontend\BlogController::class, 'detail']);
+    Route::post('/blog/detail/rate', [App\Http\Controllers\Frontend\BlogController::class, 'rate'])->name('blog.rate');
+    Route::post('/blog/detail/comment', [App\Http\Controllers\Frontend\BlogController::class, 'comment'])->name('blog.comment');
+    
+
+    Route::group(['middleware' => 'memberNotLogin'], function () {
+
+        Route::get('/register', [App\Http\Controllers\Frontend\MemberController::class, 'register']);
+        Route::post('/register', [App\Http\Controllers\Frontend\MemberController::class, 'PostRegister'])->name('register.post');
+
+        Route::get('/login', [App\Http\Controllers\Frontend\MemberController::class, 'login']);
+        Route::post('/login', [App\Http\Controllers\Frontend\MemberController::class, 'PostLogin'])->name('login.post');
+    });
+
+    Route::group(['middleware' => 'member'], function () {
+        
+        //member
+        Route::get('/logout', [App\Http\Controllers\Frontend\MemberController::class, 'logout']);
+
+        //blog
+        
+    });
 });
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::group([
     'prefix' => 'admin',
-    'namespace' => 'App\Http\Controllers\Admin',
+    'middleware' => ['admin']
 ], function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
 

@@ -2220,10 +2220,12 @@ textarea {
     margin-bottom: 27px
 }
 
-/* .response-area .media img {
-    height: 102px;
-    width: 100%;
-} */
+.response-area .media img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
 .response-area .media .pull-left {
     margin-right: 25px

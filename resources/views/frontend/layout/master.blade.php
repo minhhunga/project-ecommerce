@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Home | E-Shopper</title>
 
     <link rel="stylesheet" href="{{ asset('frontend/css/animate.css') }}">
@@ -11,7 +12,11 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/prettyPhoto.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/price-range.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/rate.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+
+    <script src="{{ asset('frontend/js/jquery.js') }}"></script>
+    <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
 </head>
 <body>
 
@@ -34,12 +39,11 @@
         </section>
 
     @include('frontend.layout.footer')
-
-    <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/contact.js') }}"></script>
+    
     <script src="{{ asset('frontend/js/gmaps.js') }}"></script>
+    <script src="{{ asset('frontend/js/contact.js') }}"></script>
     <script src="{{ asset('frontend/js/html5shiv.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery.js') }}"></script>
+
     <script src="{{ asset('frontend/js/jquery.prettyPhoto.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.scrollUp.min.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
