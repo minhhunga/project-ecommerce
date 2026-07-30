@@ -91,7 +91,7 @@
             <ul class="media-list" id="comment-list">
                 @foreach($getcomment as $value)
                 @if($value->level==0)
-                <li class="media">  
+                <li class="media" data-comment-id="{{ $value->id }}">  
                     <a class="pull-left" href="#">
                         <img class="media-object" src="{{ asset('upload/user/avatar/' .$value->avatar_user) }}" alt="">
                     </a>
@@ -119,7 +119,7 @@
                 </li>
                 @foreach($getcomment as $value1)
                 @if($value1->level==$value->id)
-                <li class="media second-media" id="second-list">
+                <li class="media second-media"  data-comment-id="{{ $value1->id }}">
                     <a class="pull-left" href="#">
                         <img class="media-object" src="{{ asset('upload/user/avatar/' .$value1->avatar_user) }}" alt="">
                     </a>
@@ -250,12 +250,12 @@
 
                             var html = `
 
-                                <li class="media">
+                                <li class="media" data-comment-id="${response.id}">
                                     <a class="pull-left" href="#">
                                         <img class="media-object" src="/upload/user/avatar/${response.avatar_user}">
                                     </a>
 
-                                        <div class="media-body">
+                                    <div class="media-body">
 
                                         <ul class="sinlge-post-meta">
                                             <li><i class="fa fa-user"></i>${response.name_user}</li>
@@ -264,7 +264,22 @@
 
                                         <p>${response.comment}</p>
                                         
+                                        <a class="btn btn-primary reply"
+                                        data-id="${response.id}"
+                                        href="">
+                                            <i class="fa fa-reply"></i>Reply
+                                        </a>
 
+                                        <div class="reply-form" style="display:none;margin-top:15px;">
+                                            <form class="form-reply" action="{{ route('blog.comment') }}" method="post">
+
+                                                <textarea class="form-control" rows="11" name="reply"></textarea>
+                                                <input type="hidden" class="level" value="${response.id}">
+                                                <br>
+                                                <button type="submit" class="btn btn-primary">Gửi</button>
+
+                                            </form>
+                                        </div>
                                     </div>
                                 </li>`;
 
@@ -281,23 +296,30 @@
                 }
             })
 
-            $('.reply').click(function(e){
+            $(document).on('click', '.reply', function(e){
                 e.preventDefault();
 
                 $('.reply-form').hide();
+
                 $(this).next('.reply-form').show();
                 $(this).next('.reply-form').find('textarea').focus();
-                
             });
 
-            $('form.form-reply').submit(function(e){
+           $(document).on('submit', '.form-reply', function(e){
                 e.preventDefault();
+
+                var checkLogin = "{{ Auth::check() }}";
+
                 var form = $(this);
-                var checkLogin= "{{ Auth::check() }}";
-                
+
+                var comment = form.find('textarea[name="reply"]').val();
+                var level = form.find('input.level').val();
+
+                var parent = $('li[data-comment-id="'+ level +'"]');
+
                 if(checkLogin){
                     var comment = $(this).find('textarea[name="reply"]').val();
-                    var level = $(this).find('input.level').val();
+                    
                     $.ajax({
                         type: "POST",
                         url: '{{ url("/frontend/blog/detail/comment") }}',
@@ -315,28 +337,16 @@
 
                                         <div class="media-body">
 
-                                        <ul class="sinlge-post-meta">
-                                            <li><i class="fa fa-user"></i>${response.name_user}</li>
-                                            <li><i class="fa fa-clock-o"></i>${response.time}</li>  
-                                        </ul>
+                                            <ul class="sinlge-post-meta">
+                                                <li><i class="fa fa-user"></i>${response.name_user}</li>
+                                                <li><i class="fa fa-clock-o"></i>${response.time}</li>  
+                                            </ul>
 
-                                        <p>${response.comment}</p>
-                                        <a class="btn btn-primary reply" id="{{ $value1->id }}" href=""><i class="fa fa-reply"></i>Reply</a>
-
-                                        <div class="reply-form" style="display:none; margin-top:15px;">
-                                            <form class="form-reply" action="{{ route('blog.comment') }}" method="post">
-                                                @csrf
-                                                <textarea class="form-control comment" rows="11" name="reply" placehoder="Nhập bình luận..."></textarea>
-                                                <input type="hidden" class="level" value="{{ $value1->id }}">
-                                                <br>
-                                                <button type="submit" class="btn btn-primary">
-                                                    Gửi
-                                                </button>
-                                            </form>
+                                            <p>${response.comment}</p>
+                                        
                                         </div>
-                                    </div>
                                 </li>`;
-                            $("#second-list").before(html);
+                            parent.after(html);
                             form.find('textarea[name="reply"]').val('');
                             form.closest('.reply-form').hide();
                         }
