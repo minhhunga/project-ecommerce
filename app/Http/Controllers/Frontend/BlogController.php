@@ -28,7 +28,9 @@ class BlogController extends Controller
     public function detail($id)
     {
         $blog = Blog::findorFail($id);
-        $getcomment = DB::table('comment')->where('id_blog', $id)->get();
+        $getcomment = Comment::where('id_blog',$id)
+                     ->orderBy('id','desc')
+                     ->get();
 
         $avgRate = Rate::where('id_blog', $id)->avg('rate');
         $avgRate = round($avgRate);
@@ -84,8 +86,16 @@ class BlogController extends Controller
         $data['name_user'] = Auth::user()->name;
         $data['avatar_user'] = Auth::user()->avatar;
 
-        if (Comment::create($data)) {
-            return response()->json(['success' => 'Bình luận thành công.']);
+        $comment = Comment::create($data);
+        if ($comment) {
+            return response()->json([
+                'success' => 'Bình luận thành công.',
+                'id' => $comment->id,
+                'comment' => $comment->comment,
+                'name_user' => $comment->name_user,
+                'avatar_user' => $comment->avatar_user,
+                'time' => $comment->created_at->format('Y-m-d H:i:s'),
+            ]);
         }
 
     }

@@ -88,7 +88,7 @@
         <div class="response-area"> 
             <h2>{{ count($getcomment) }} RESPONSES</h2>
 
-            <ul class="media-list">
+            <ul class="media-list" id="comment-list">
                 @foreach($getcomment as $value)
                 @if($value->level==0)
                 <li class="media">  
@@ -99,15 +99,27 @@
                         <ul class="sinlge-post-meta">
                             <li><i class="fa fa-user"></i>{{$value->name_user}}</li>
                             <li><i class="fa fa-clock-o"></i>{{ $value->time }}</li>
-                            <li><i class="fa fa-calendar"></i>{{ $value->time }}</li>
                         </ul>
                         <p>{{$value->comment}}</p>
-                        <a class="btn btn-primary reply" id="{{ $value->id }}" href=""><i class="fa fa-reply"></i>Replay</a>
+                        <a class="btn btn-primary reply" id="{{ $value->id }}" href=""><i class="fa fa-reply"></i>Reply</a>
+                        
+                        <!-- Form reply -->
+                        <div class="reply-form" style="display:none; margin-top:15px;">
+                            <form class="form-reply" action="{{ route('blog.comment') }}" method="post">
+                                @csrf
+                                <textarea class="form-control comment" rows="11" name="reply" placehoder="Nhập bình luận..."></textarea>
+                                <input type="hidden" class="level" value="{{ $value->id }}">
+                                <br>
+                                <button type="submit" class="btn btn-primary">
+                                    Gửi
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </li>
                 @foreach($getcomment as $value1)
                 @if($value1->level==$value->id)
-                <li class="media second-media">
+                <li class="media second-media" id="second-list">
                     <a class="pull-left" href="#">
                         <img class="media-object" src="{{ asset('upload/user/avatar/' .$value1->avatar_user) }}" alt="">
                     </a>
@@ -115,10 +127,22 @@
                         <ul class="sinlge-post-meta">
                             <li><i class="fa fa-user"></i>{{$value1->name_user}}</li>
                             <li><i class="fa fa-clock-o"></i>{{ $value1->time }}</li>
-                            <li><i class="fa fa-calendar"></i>{{ $value1->time }}</li>
                         </ul>
                         <p>{{$value1->comment}}</p>
-                        <a class="btn btn-primary reply" id="{{ $value1->id }}" href=""><i class="fa fa-reply"></i>Replay</a>
+                        <a class="btn btn-primary reply" id="{{ $value1->id }}" href=""><i class="fa fa-reply"></i>Reply</a>
+
+                        <!-- form reply -->
+                        <div class="reply-form" style="display:none; margin-top:15px;">
+                            <form class="form-reply" action="{{ route('blog.comment') }}" method="post">
+                                @csrf
+                                <textarea class="form-control comment" rows="11" name="reply" placehoder="Nhập bình luận..."></textarea>
+                                <input type="hidden" class="level" value="{{ $value1->id }}">
+                                <br>
+                                <button type="submit" class="btn btn-primary">
+                                    Gửi
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </li>
                 @endif
@@ -223,9 +247,33 @@
                             id_blog: "{{ $blog->id }}",
                         },
                         success: function(response) {
-                            console.log(response);
 
+                            var html = `
+
+                                <li class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object" src="/upload/user/avatar/${response.avatar_user}">
+                                    </a>
+
+                                        <div class="media-body">
+
+                                        <ul class="sinlge-post-meta">
+                                            <li><i class="fa fa-user"></i>${response.name_user}</li>
+                                            <li><i class="fa fa-clock-o"></i>${response.time}</li>  
+                                        </ul>
+
+                                        <p>${response.comment}</p>
+                                        
+
+                                    </div>
+                                </li>`;
+
+                            // thêm comment mới vào đầu danh sách
+                            $("#comment-list").prepend(html);
+
+                            // xóa nội dung textarea
                             $('textarea[name="comment"]').val('');
+
                         }
                     });
                 }else{
@@ -235,10 +283,68 @@
 
             $('.reply').click(function(e){
                 e.preventDefault();
-                var commentId = $(this).attr('id');
-                $('input[name="level"]').val(commentId);
-                $('textarea[name="comment"]').val('').focus();
+
+                $('.reply-form').hide();
+                $(this).next('.reply-form').show();
+                $(this).next('.reply-form').find('textarea').focus();
+                
             });
+
+            $('form.form-reply').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                var checkLogin= "{{ Auth::check() }}";
+                
+                if(checkLogin){
+                    var comment = $(this).find('textarea[name="reply"]').val();
+                    var level = $(this).find('input.level').val();
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ url("/frontend/blog/detail/comment") }}',
+                        data: {
+                            comment: comment,
+                            level: level,
+                            id_blog: "{{ $blog->id }}",
+                        },
+                        success: function(response) {
+                            var html = `
+                                <li class="media second-media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object" src="/upload/user/avatar/${response.avatar_user}">
+                                    </a>
+
+                                        <div class="media-body">
+
+                                        <ul class="sinlge-post-meta">
+                                            <li><i class="fa fa-user"></i>${response.name_user}</li>
+                                            <li><i class="fa fa-clock-o"></i>${response.time}</li>  
+                                        </ul>
+
+                                        <p>${response.comment}</p>
+                                        <a class="btn btn-primary reply" id="{{ $value1->id }}" href=""><i class="fa fa-reply"></i>Reply</a>
+
+                                        <div class="reply-form" style="display:none; margin-top:15px;">
+                                            <form class="form-reply" action="{{ route('blog.comment') }}" method="post">
+                                                @csrf
+                                                <textarea class="form-control comment" rows="11" name="reply" placehoder="Nhập bình luận..."></textarea>
+                                                <input type="hidden" class="level" value="{{ $value1->id }}">
+                                                <br>
+                                                <button type="submit" class="btn btn-primary">
+                                                    Gửi
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>`;
+                            $("#second-list").before(html);
+                            form.find('textarea[name="reply"]').val('');
+                            form.closest('.reply-form').hide();
+                        }
+                    });
+                }else{
+                    alert('Vui lòng đăng nhập để bình luận.');
+                }
+            })
 		});
     </script>
 @endsection
