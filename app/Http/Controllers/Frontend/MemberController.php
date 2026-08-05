@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\User;
+use App\Models\Country;
 
 class MemberController extends Controller
 {
@@ -82,25 +84,40 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function profile()
     {
-        //
+        $getuser = Auth::user();
+        $country = Country::all();
+        return view('frontend.member.account', compact('getuser', 'country'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(UpdateProfileRequest $request)
     {
-        //
-    }
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+        $data = $request->all();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        $file = $request->file('avatar');
+        if(!empty($file)){
+            $data['avatar']  = $file->getClientOriginalName(); 
+        }
+
+        if(!empty($data['password'])){
+            $data['password'] = bcrypt($data['password']);
+        }else{
+            $data['password'] = $user->password;
+        }
+
+        if($user->update($data)){
+            if(!empty($file)){
+                $file->move('upload/user/avatar', $file->getClientOriginalName());
+            }
+
+            return redirect()->back()->with('success', 'Cập nhật hồ sơ thành công.');
+        }else{
+            return redirect()->back()->with('error', 'Cập nhật hồ sơ thất bại.');
+        }
+
     }
 
     /**

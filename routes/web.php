@@ -32,7 +32,17 @@ Route::group([
     Route::group(['middleware' => 'member'], function () {
         
         //member
+        Route::get('/account/update', [App\Http\Controllers\Frontend\MemberController::class, 'profile']);
+        Route::post('/account/update', [App\Http\Controllers\Frontend\MemberController::class, 'update'])->name('account.update');
         Route::get('/logout', [App\Http\Controllers\Frontend\MemberController::class, 'logout']);
+
+        //product
+        Route::get('/account/my-product', [App\Http\Controllers\Frontend\ProductController::class, 'index'])->name('product.list');
+        Route::get('/account/create-product', [App\Http\Controllers\Frontend\ProductController::class, 'create']);
+        Route::post('/account/create-product', [App\Http\Controllers\Frontend\ProductController::class, 'addProduct'])->name('product.create');
+        Route::get('/account/update-product/{id}', [App\Http\Controllers\Frontend\ProductController::class, 'edit']);
+        Route::post('/account/update-product/{id}', [App\Http\Controllers\Frontend\ProductController::class, 'update'])->name('product.update');
+        Route::get('/account/delete-product/{id}', [App\Http\Controllers\Frontend\ProductController::class, 'delete'])->name('product.delete');
 
         //blog
         
@@ -56,6 +66,16 @@ Route::group([
     Route::get('/country/create', [App\Http\Controllers\Admin\CountryController::class, 'create']);
     Route::post('/country/create', [App\Http\Controllers\Admin\CountryController::class, 'store'])->name('country.store');
     Route::get('/country/delete/{id}', [App\Http\Controllers\Admin\CountryController::class, 'delete'])->name('country.delete');
+
+    Route::get('/brand', [App\Http\Controllers\Admin\BrandController::class, 'listbrand']);
+    Route::get('/brand/create', [App\Http\Controllers\Admin\BrandController::class, 'index']);
+    Route::post('/brand/create', [App\Http\Controllers\Admin\BrandController::class, 'create'])->name('brand.create');
+    Route::get('/brand/delete/{id}', [App\Http\Controllers\Admin\BrandController::class, 'delete'])->name('brand.delete');
+
+    Route::get('/category', [App\Http\Controllers\Admin\CategoryController::class, 'listcategory']);
+    Route::get('/category/create', [App\Http\Controllers\Admin\CategoryController::class, 'index']);
+    Route::post('/category/create', [App\Http\Controllers\Admin\CategoryController::class, 'create'])->name('category.create');
+    Route::get('/category/delete/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('category.delete');
 
     Route::get('/blog', [App\Http\Controllers\Admin\BlogController::class, 'index']);
     Route::get('/blog/create', [App\Http\Controllers\Admin\BlogController::class, 'create']);
