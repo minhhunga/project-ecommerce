@@ -90,13 +90,23 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $data = $request->all();
+
+        if($data['status']==1){
+            if(empty($data['sale'])){
+                return back()->withErrors(['sale' => 'Please enter the sale rate of product']);
+            }
+        } else{
+            $data['sale'] = 0;
+        }
         
         // Lấy hình cũ
         $oldImage = json_decode($product->image, true) ?? [];
 
          //xóa ảnh cũ
         if(!empty($data['image_delete'])) {
-
+            if (count($data['image_delete']) == count($oldImage)) {
+                return back()->withErrors(['image' => 'At least 1 image is required for product.']);
+            }
             foreach($data['image_delete'] as $key => $value) {
                 if((in_array($value, $oldImage))) {
                    
@@ -114,7 +124,7 @@ class ProductController extends Controller
         // Kiểm tra số lượng hình ảnh mới và hình ảnh cũ
         if($request->hasFile('image')) {
             if(count($oldImage) + count($request->file('image')) > 3) {
-                return back()->with('error', 'You can only upload a maximum of 3 images.');
+                return back()->withErrors(['image' => 'You can only upload a maximum of 3 images.']);
             }
 
             foreach($request->file('image') as $file){
