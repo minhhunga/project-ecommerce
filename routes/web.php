@@ -12,7 +12,10 @@ Route::group([
 ], function () {
 
     Route::get('/home', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
-    
+
+    Route::get('/product-detail/{id}', [App\Http\Controllers\Frontend\HomeController::class, 'detail'])->name('product.detail');
+    Route::get('/cart/buy', [App\Http\Controllers\Frontend\CartController::class, 'AddCart'])->name('frontend.cart.add');
+
     //blog
     Route::get('/blog/list', [App\Http\Controllers\Frontend\BlogController::class, 'list']);
     Route::get('/blog/detail/{id}', [App\Http\Controllers\Frontend\BlogController::class, 'detail']);
@@ -43,7 +46,7 @@ Route::group([
         Route::get('/account/update-product/{id}', [App\Http\Controllers\Frontend\ProductController::class, 'edit']);
         Route::post('/account/update-product/{id}', [App\Http\Controllers\Frontend\ProductController::class, 'update'])->name('product.update');
         Route::get('/account/delete-product/{id}', [App\Http\Controllers\Frontend\ProductController::class, 'delete'])->name('product.delete');
-
+        
         //blog
         
     });

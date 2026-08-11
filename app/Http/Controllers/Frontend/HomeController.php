@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product;
+
 
 class HomeController extends Controller
 {
@@ -12,31 +14,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.home.home');
+        $product = Product::all();
+        return view('frontend.home.home', compact('product'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function detail(string $id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        
+        $product = Product::find($id)->toArray();
+        $getArrImage = json_decode($product['image'], true);
+        return view('frontend.product.detail', compact('product', 'getArrImage'));
     }
 
     /**

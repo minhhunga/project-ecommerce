@@ -22,6 +22,7 @@ class ProductController extends Controller
         return view('frontend.product.product', compact('product'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
