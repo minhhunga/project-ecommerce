@@ -12,9 +12,15 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function showCart()
     {
-        //
+        $cart = session()->get('cart', []);
+        $sum = 0;
+        foreach ($cart as $item) {
+            $sum += $item['price'] * $item['qty'];
+        }
+
+        return view('frontend.cart.cart', compact('cart', 'sum'));
     }
 
     /**
@@ -23,30 +29,86 @@ class CartController extends Controller
     public function AddCart(Request $request)
     {
         $id = $request->id;
-        $array = [];
-        $array['id'] = $id;
-        $array['qty'] = 1;
+        $product = Product::findOrFail($id);
+        $cart = session()->get('cart', []);
+        
+        if(isset($cart[$id])) {
+            $cart[$id]['qty']++;
+        } else {
+            $cart[$id] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'image' => $product->image,
+                "qty" => 1,
+            ];
+        }
 
-        if(session()->has('cart')) {
-            $getsession = session()->get('cart');
+        session()->put('cart', $cart);
 
-        } 
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['qty'];
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Add product to your cart successfully.',
+            'total' => $total
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function updateCart(Request $request)
     {
-        //
+        $itemId = $request->id;
+        $qty = $request->qty;
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$itemId])) {
+            $cart[$itemId]['qty'] = $qty;
+            session()->put('cart', $cart);
+
+            $itemtotal = $cart[$itemId]['price'] * $qty;
+            $sum = 0;
+            foreach ($cart as $item) {
+                $sum += $item['price'] * $item['qty'];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cart updated successfully.',
+            'itemtotal' => $itemtotal,
+            'sum' => $sum,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Cart $cart)
+    public function deleteCart(Cart $cart)
     {
-        //
+        $id = request()->id;
+        $cart = session()->get('cart', []);
+
+        if(isset($cart[$id])) {
+            unset($cart[$id]);
+            session()->put('cart', $cart);
+
+            $sum = 0;
+            foreach ($cart as $item) {
+                $sum += $item['price'] * $item['qty'];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'sum' => $sum,
+            'message' => 'Product removed from cart successfully.'
+        ]);
     }
 
     /**

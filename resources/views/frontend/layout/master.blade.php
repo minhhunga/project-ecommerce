@@ -20,25 +20,36 @@
 </head>
 <body>
 
-    @include('frontend.layout.header')
+        @include('frontend.layout.header')
 
-    @include('frontend.layout.slider')
+        @if(!request()->is('frontend/account*') && !request()->is('frontend/cart*'))
+            @include('frontend.layout.slider')
+        @endif
 
         <section>
             <div class="container">
                 <div class="row">
 
-                    @include('frontend.layout.menu-left')
+                    @if(!request()->is('frontend/account*') && !request()->is('frontend/cart*'))
 
-                    <div class="col-sm-9 padding-right">
-                        @yield('content')
-                    </div>
+                        @include('frontend.layout.menu-left')
+                        <div class="col-sm-9 padding-right">
+                            @yield('content')
+                        </div>
+
+                    @else
+
+                        <div class="col-sm-12 padding-right">
+                            @yield('content')
+                        </div>
+
+                    @endif
 
                 </div>
             </div>
         </section>
 
-    @include('frontend.layout.footer')
+        @include('frontend.layout.footer')
     
     <script src="{{ asset('frontend/js/gmaps.js') }}"></script>
     <script src="{{ asset('frontend/js/contact.js') }}"></script>

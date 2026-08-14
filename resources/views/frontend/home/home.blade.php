@@ -9,18 +9,20 @@
             <div class="col-sm-4">
                 <div class="product-image-wrapper">
                     <div class="single-products">
+
                             <div class="productinfo text-center">
                                 <img src="{{ asset('upload/product/' . $image[0]) }}" alt="" />
                                 <h2>${{ $value->price }}</h2>
                                 <p>{{ $value->name }}</p>
                                 <a href="#" class="btn btn-default add-to-cart" id="{{ $value->id }}"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                             </div>
+
                             <div class="product-overlay">
                                 <div class="overlay-content">
                                     <h2>${{ $value->price }}</h2>
                                     <p>{{ $value->name }}</p>
-                                    <a href="{{ url('/frontend/product-detail/'. $value['id']) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem sản phẩm</a>
-                                    <a href="#" class="btn btn-default add-to-cart" id="{{ $value->id }}"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                    <a href="{{ url('/frontend/product-detail/'. $value['id']) }}" class="btn btn-default view-product"><i class="fa fa-shopping-cart"></i>Xem sản phẩm</a>
+                                    <a href="#" class="btn btn-default add-to-cart" id="{{ $value['id'] }}"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                                 </div>
                             </div>
                     </div>
@@ -435,11 +437,9 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        alert('Product added to cart!');
+                        $('.cart-count').text(response.total);
+                        // alert('Product added to cart!');
                     },
-                    error: function(xhr) {
-                        alert('Error adding product to cart.');
-                    }
                 });
             });
         });

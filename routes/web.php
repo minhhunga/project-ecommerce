@@ -14,7 +14,11 @@ Route::group([
     Route::get('/home', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
 
     Route::get('/product-detail/{id}', [App\Http\Controllers\Frontend\HomeController::class, 'detail'])->name('product.detail');
+
     Route::get('/cart/buy', [App\Http\Controllers\Frontend\CartController::class, 'AddCart'])->name('frontend.cart.add');
+    Route::get('/cart-product', [App\Http\Controllers\Frontend\CartController::class, 'showCart'])->name('cart.show');
+    Route::post('/cart/update', [App\Http\Controllers\Frontend\CartController::class, 'updateCart'])->name('cart.update');
+    Route::post('/cart/delete', [App\Http\Controllers\Frontend\CartController::class, 'deleteCart'])->name('cart.delete');
 
     //blog
     Route::get('/blog/list', [App\Http\Controllers\Frontend\BlogController::class, 'list']);
