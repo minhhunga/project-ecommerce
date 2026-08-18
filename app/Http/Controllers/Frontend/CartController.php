@@ -114,9 +114,14 @@ class CartController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cart $cart)
+    public function checkout(Cart $cart)
     {
-        //
+        $cart = session()->get('cart', []);
+        $sum = 0;
+        foreach ($cart as $item) {
+            $sum += $item['price'] * $item['qty'];
+        }
+        return view('frontend.cart.check-out', compact('cart', 'sum'));
     }
 
     /**

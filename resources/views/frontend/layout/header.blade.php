@@ -61,7 +61,7 @@
 						<ul class="nav navbar-nav">
 							
 							<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
-							<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+							<li><a href="{{ url('frontend/cart/checkout') }}"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 							<li>
 								<a href="{{ route('cart.show') }}">
 									<i class="fa fa-shopping-cart"></i> Cart
@@ -106,7 +106,7 @@
 								<ul role="menu" class="sub-menu">
 									<li><a href="shop.html">Products</a></li>
 									<li><a href="product-details.html">Product Details</a></li> 
-									<li><a href="checkout.html">Checkout</a></li> 
+									<li><a href="{{ url('frontend/cart/checkout') }}">Checkout</a></li> 
 									<li><a href="cart.html">Cart</a></li> 
 									<li><a href="login.html">Login</a></li> 
 								</ul>
@@ -124,7 +124,10 @@
 				</div>
 				<div class="col-sm-3">
 					<div class="search_box pull-right">
-						<input type="text" placeholder="Search"/>
+						<form action="{{ route('frontend.search') }}" method="GET">
+							<input type="text" name="search" placeholder="Search by name"/>
+							<button type="submit" class="btn btn-default search">Search</button>
+						</form>
 					</div>
 				</div>
 			</div>

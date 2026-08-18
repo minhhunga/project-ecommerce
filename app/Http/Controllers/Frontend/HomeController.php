@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\category;
+use App\Models\Brand;
 
 
 class HomeController extends Controller
@@ -15,9 +17,10 @@ class HomeController extends Controller
     public function index()
     {
         $product = Product::all();
-        return view('frontend.home.home', compact('product'));
+        $category = Category::all();
+        $brand = Brand::all();
+        return view('frontend.home.home', compact('product', 'category', 'brand'));
     }
-
 
     public function detail(string $id)
     {
@@ -25,6 +28,27 @@ class HomeController extends Controller
         $product = Product::find($id)->toArray();
         $getArrImage = json_decode($product['image'], true);
         return view('frontend.product.detail', compact('product', 'getArrImage'));
+    }
+
+    public function SearchName(Request $request)
+    {
+        $search = $request->input('search');
+        $product = Product::where('name', 'like', '%' . $search . '%')->get();
+        return view('frontend.home.home', compact('product'));
+    }
+
+    public function SearchPrice(Request $request){
+        $min = $request -> price_min;
+        $max = $request ->price_max;
+
+        $product = Product::whereBetween('price', [$min, $max])->get();
+
+        if(!empty($product)){
+            return response()->json(['product' => $product]);
+        }else{
+            return 0;
+        }
+
     }
 
     /**

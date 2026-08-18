@@ -14,11 +14,20 @@ Route::group([
     Route::get('/home', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
 
     Route::get('/product-detail/{id}', [App\Http\Controllers\Frontend\HomeController::class, 'detail'])->name('product.detail');
+    
+    //Search
+    Route::get('/product/search', [App\Http\Controllers\Frontend\HomeController::class, 'SearchName'])->name('frontend.search'); 
+    Route::get('/product/search-price', [App\Http\Controllers\Frontend\HomeController::class, 'SearchPrice'])->name('frontend.search-price');
 
+    //cart
     Route::get('/cart/buy', [App\Http\Controllers\Frontend\CartController::class, 'AddCart'])->name('frontend.cart.add');
     Route::get('/cart-product', [App\Http\Controllers\Frontend\CartController::class, 'showCart'])->name('cart.show');
     Route::post('/cart/update', [App\Http\Controllers\Frontend\CartController::class, 'updateCart'])->name('cart.update');
     Route::post('/cart/delete', [App\Http\Controllers\Frontend\CartController::class, 'deleteCart'])->name('cart.delete');
+    Route::get('/cart/checkout', [App\Http\Controllers\Frontend\CartController::class, 'checkout'])->name('cart.checkout');
+
+    //email
+    Route::get('/send-email', [App\Http\Controllers\MailController::class, 'index'])->name('email.send');
 
     //blog
     Route::get('/blog/list', [App\Http\Controllers\Frontend\BlogController::class, 'list']);
