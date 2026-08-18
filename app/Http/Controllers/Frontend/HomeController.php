@@ -17,9 +17,8 @@ class HomeController extends Controller
     public function index()
     {
         $product = Product::all();
-        $category = Category::all();
-        $brand = Brand::all();
-        return view('frontend.home.home', compact('product', 'category', 'brand'));
+
+        return view('frontend.home.home', compact('product'));
     }
 
     public function detail(string $id)
@@ -38,16 +37,15 @@ class HomeController extends Controller
     }
 
     public function SearchPrice(Request $request){
-        $min = $request -> price_min;
-        $max = $request ->price_max;
+        
+        $min = $request->minPrice;
+        $max = $request->maxPrice;
 
         $product = Product::whereBetween('price', [$min, $max])->get();
 
-        if(!empty($product)){
-            return response()->json(['product' => $product]);
-        }else{
-            return 0;
-        }
+        return response()->json([
+            'product' => $product
+        ]);
 
     }
 

@@ -34,6 +34,9 @@ Route::group([
     Route::get('/blog/detail/{id}', [App\Http\Controllers\Frontend\BlogController::class, 'detail']);
     Route::post('/blog/detail/rate', [App\Http\Controllers\Frontend\BlogController::class, 'rate'])->name('blog.rate');
     Route::post('/blog/detail/comment', [App\Http\Controllers\Frontend\BlogController::class, 'comment'])->name('blog.comment');
+
+    // Route::get('/product/brand/{id}', [App\Http\Controllers\Frontend\HomeController::class, 'create'])->name('product.detail');
+    // Route::get('/product/category/{id}', [App\Http\Controllers\Frontend\HomeController::class, 'create'])->name('product.detail');
     
 
     Route::group(['middleware' => 'memberNotLogin'], function () {
