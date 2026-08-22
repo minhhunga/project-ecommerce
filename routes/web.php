@@ -18,6 +18,7 @@ Route::group([
     //Search
     Route::get('/product/search', [App\Http\Controllers\Frontend\HomeController::class, 'SearchName'])->name('frontend.search'); 
     Route::get('/product/search-price', [App\Http\Controllers\Frontend\HomeController::class, 'SearchPrice'])->name('frontend.search-price');
+    Route::get('/product/search-advanced', [App\Http\Controllers\Frontend\HomeController::class, 'SearchAdvanced'])->name('search-advanced'); 
 
     //cart
     Route::get('/cart/buy', [App\Http\Controllers\Frontend\CartController::class, 'AddCart'])->name('frontend.cart.add');

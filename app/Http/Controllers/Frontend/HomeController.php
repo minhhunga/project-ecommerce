@@ -16,6 +16,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        
         $product = Product::all();
 
         return view('frontend.home.home', compact('product'));
@@ -47,6 +48,33 @@ class HomeController extends Controller
             'product' => $product
         ]);
 
+    }
+
+    public function SearchAdvanced(Request $request){
+
+        $category = Category::all();
+        $brand = Brand::all();
+        $query = Product::query();
+
+        if(!empty($request->name)){
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        if(!empty($request->brand)){
+            $query->where('id_brand', $request->brand);
+        }
+        if(!empty($request->category)){
+            $query->where('id_category', $request->category);
+        }
+        if(!empty($request->price)){
+            $price = explode('-', $request->price);
+            $query->whereBetween('price', [$price[0], $price[1]]);
+        }
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('status', $request->status);
+        }
+
+        $product = $query->get();
+        return view('frontend.home.search-advenced', compact('product', 'category', 'brand'));
     }
 
     /**

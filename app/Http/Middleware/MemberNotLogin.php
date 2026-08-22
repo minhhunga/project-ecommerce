@@ -16,10 +16,18 @@ class MemberNotLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if( !Auth::check() ){
+        // Nếu chưa đăng nhập -> cho phép truy cập (đăng ký, đăng nhập)
+        if (!Auth::check()) {
             return $next($request);
-        }else{
-            return redirect()->back()->withErrors('Thao tác không đúng quy trình! Xin thử lại!');
+        }
+        
+        // Nếu đã đăng nhập -> chuyển hướng về trang phù hợp
+        if (Auth::user()->level == 1) {
+            // Admin -> về dashboard
+            return redirect('/admin/dashboard')->with('error', 'Bạn đã đăng nhập rồi!');
+        } else {
+            // Member -> về trang chủ frontend
+            return redirect('/frontend/home')->with('error', 'Bạn đã đăng nhập rồi!');
         }
     }
 }

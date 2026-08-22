@@ -16,10 +16,17 @@ class Member
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if( Auth::check() && Auth::user()->level == 0 ){
+        // Kiểm tra đã đăng nhập và là member (level == 0)
+        if (Auth::check() && Auth::user()->level == 0) {
             return $next($request);
-        }else{
-            return redirect('/frontend/login')->with('pleaseLogin','Please login to use this function');
         }
+        
+        // Nếu đã đăng nhập nhưng là admin (level == 1)
+        if (Auth::check() && Auth::user()->level == 1) {
+            abort(403, 'Admin không thể truy cập vào khu vực này');
+        }
+        
+        // Chưa đăng nhập -> chuyển về trang login
+        return redirect('/frontend/login')->with('pleaseLogin', 'Vui lòng đăng nhập để sử dụng chức năng này');
     }
 }

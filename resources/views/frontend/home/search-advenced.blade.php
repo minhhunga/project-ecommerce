@@ -2,6 +2,73 @@
 @section('content')
     <div class="features_items"><!--features_items-->
         <h2 class="title text-center">Features Items</h2>
+        <form id="search-form" class="col-md-12" method="GET" action="{{ route('search-advanced') }}">
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="name">Product Name</label>
+                        <input type="text" name="name" id="search-name" class="form-control" placeholder="Product Name">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <select name="price" id="search-price" class="form-control">
+                            <option value="">Choose price</option>
+                            <option value="0-1000">0-1000</option>
+                            <option value="1000-5000">1000-5000</option>
+                            <option value="5000-10000">5000-10000</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select name="category" id="search-category" class="form-control">
+                            <option value="">Category</option>
+                            @foreach($category as $key => $value)
+                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="brand">Brand</label>
+                        <select name="brand" id="search-brand" class="form-control">
+                            <option value="">Brand</option>
+                            @foreach($brand as $key => $value)
+                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" id="search-status" class="form-control">
+                            <option value="">Status</option>
+                            <option value="1">Sale</option>
+                            <option value="0">New</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-default" style=" background-color: orange; color: white; width: 100%;"> Search </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
         
         @foreach($product as $key => $value)
             @php
@@ -423,27 +490,4 @@
                 </a>			
         </div>
     </div><!--/recommended_items-->
-
-    <script>
-        $(document).ready(function() {
-            $(document).on('click', '.add-to-cart', function(e) {
-                e.preventDefault();
-                var productId = $(this).attr('id');
-                $.ajax({
-                    url: '{{ route("frontend.cart.add") }}',
-                    method: 'GET',
-                    data: {
-                        id: productId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        $('.cart-count').text(response.total);
-                        // alert('Product added to cart!');
-                    },
-                });
-            });
-
-        });
-    </script>
 @endsection
