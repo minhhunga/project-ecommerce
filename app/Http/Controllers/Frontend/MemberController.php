@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Mail\ResetPasswordMailNotify;
 use App\Models\User;
 use App\Models\Country;
 
@@ -73,6 +77,49 @@ class MemberController extends Controller
         }else{
             return redirect()->back()->withErrors('Email hoặc mật khẩu không đúng');
         }
+    }
+
+    public function forgotPassword()
+    {
+        return view('frontend.member.forgot-password');
+    }
+
+    public function sendResetLink(Request $request)
+    {
+
+        $user = User::where('email', $request->email)->first();
+        if(!$user) {
+            return redirect()->back()->with('error', 'Email không tồn tại.');
+        }
+        Mail::to($user->email)->send(new ResetPasswordMailNotify($user));
+
+        return back()->with('success', 'Link reset password đã được gửi vào email');
+    }
+
+    public function resetPassword($id)
+    {
+        $user = User::find($id);
+        
+        if (!$user) {
+            return redirect()->route('frontend.member.forgot-password')->with('error', 'Người dùng không tồn tại');
+        }
+
+        return view('frontend.member.reset-password', compact('user'));
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->route('frontend.member.forgot-password')->with('error', 'Người dùng không tồn tại');
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect('/frontend/login')->with('success', 'Mật khẩu đã được cập nhật thành công. Vui lòng đăng nhập.');
     }
     
     public function logout(Request $request)

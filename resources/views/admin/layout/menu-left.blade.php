@@ -20,6 +20,20 @@
                 </li>
 
                 <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('/admin/list-users/') }}" aria-expanded="false">
+                        <i class="fa-solid fa-clipboard-user"></i>
+                        <span class="hide-menu">List Users</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('/admin/list-products/') }}" aria-expanded="false">
+                        <i class="fa-solid fa-list"></i>
+                        <span class="hide-menu">List Products</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('/admin/blog/') }}" aria-expanded="false">
                         <i class="fa-brands fa-blogger"></i>
                         <span class="hide-menu">Blog</span>
@@ -44,6 +58,13 @@
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('/admin/category/') }}" aria-expanded="false">
                         <i class="mdi mdi-border-none"></i>
                         <span class="hide-menu">Category</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('/admin/history/') }}" aria-expanded="false">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span class="hide-menu">History</span>
                     </a>
                 </li>
 

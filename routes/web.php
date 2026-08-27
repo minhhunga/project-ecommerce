@@ -47,6 +47,12 @@ Route::group([
 
         Route::get('/login', [App\Http\Controllers\Frontend\MemberController::class, 'login']);
         Route::post('/login', [App\Http\Controllers\Frontend\MemberController::class, 'PostLogin'])->name('login.post');
+
+        Route::get('/forgot-password', [App\Http\Controllers\Frontend\MemberController::class, 'forgotPassword'])->name('forgot.password');
+        Route::post('/forgot-password', [App\Http\Controllers\Frontend\MemberController::class, 'sendResetLink'])->name('send.reset.link');
+
+        Route::get('/reset-password/{id}', [App\Http\Controllers\Frontend\MemberController::class, 'resetPassword'])->name('reset.password');
+        Route::post('/reset-password/{id}', [App\Http\Controllers\Frontend\MemberController::class, 'updatePassword'])->name('update.password');
     });
 
     Route::group(['middleware' => 'member'], function () {
@@ -81,22 +87,37 @@ Route::group([
 
     Route::get('/profile', [App\Http\Controllers\Admin\UserController::class, 'index']);
     Route::post('/profile', [App\Http\Controllers\Admin\UserController::class, 'UpdateProfile'])->name('profile.update');
+    
+    //list user
+    Route::get('/list-users', [App\Http\Controllers\Admin\ListUserController::class, 'index']);    
+    Route::get('/list-users/delete/{id}', [App\Http\Controllers\Admin\ListUserController::class, 'destroy'])->name('list-user.delete');
 
+    //history
+    Route::get('/history', [App\Http\Controllers\Admin\HistoryController::class, 'index']);
+
+    //list products
+    Route::get('/list-products', [App\Http\Controllers\Admin\ListProductController::class, 'index']);
+    Route::get('/list-products/delete/{id}', [App\Http\Controllers\Admin\ListProductController::class, 'destroy'])->name('list-product.delete');
+
+    //country
     Route::get('/country', [App\Http\Controllers\Admin\CountryController::class, 'index']);
     Route::get('/country/create', [App\Http\Controllers\Admin\CountryController::class, 'create']);
     Route::post('/country/create', [App\Http\Controllers\Admin\CountryController::class, 'store'])->name('country.store');
     Route::get('/country/delete/{id}', [App\Http\Controllers\Admin\CountryController::class, 'delete'])->name('country.delete');
 
+    //brand
     Route::get('/brand', [App\Http\Controllers\Admin\BrandController::class, 'listbrand']);
     Route::get('/brand/create', [App\Http\Controllers\Admin\BrandController::class, 'index']);
     Route::post('/brand/create', [App\Http\Controllers\Admin\BrandController::class, 'create'])->name('brand.create');
     Route::get('/brand/delete/{id}', [App\Http\Controllers\Admin\BrandController::class, 'delete'])->name('brand.delete');
 
+    //category
     Route::get('/category', [App\Http\Controllers\Admin\CategoryController::class, 'listcategory']);
     Route::get('/category/create', [App\Http\Controllers\Admin\CategoryController::class, 'index']);
     Route::post('/category/create', [App\Http\Controllers\Admin\CategoryController::class, 'create'])->name('category.create');
     Route::get('/category/delete/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('category.delete');
 
+    //blog
     Route::get('/blog', [App\Http\Controllers\Admin\BlogController::class, 'index']);
     Route::get('/blog/create', [App\Http\Controllers\Admin\BlogController::class, 'create']);
     Route::post('/blog/create', [App\Http\Controllers\Admin\BlogController::class, 'store'])->name('blog.store');
