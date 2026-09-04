@@ -17,7 +17,7 @@
                                         <th scope="col">Email</th>
                                         <th scope="col">Phone</th>
                                         <th scope="col">Total</th>
-                                 
+                                        <th scope="col">Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -28,6 +28,7 @@
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->price }}</td>
+                                        <td>{{ $item->created_at }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

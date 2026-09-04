@@ -59,8 +59,8 @@
                             </div>
                         </div>
                     </a>
-                    <form class="app-search position-absolute">
-                        <input type="text" class="form-control" placeholder="Search &amp; enter">
+                    <form class="app-search position-absolute" method="GET" action="{{ url('/admin/list-products') }}">
+                        <input name="search" type="text" class="form-control" placeholder="Search &amp; enter" value="{{ request('search') }}">
                         <a class="srh-btn">
                             <i class="ti-close"></i>
                         </a>

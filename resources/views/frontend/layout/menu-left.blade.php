@@ -2,33 +2,35 @@
     <div class="left-sidebar">
         <h2>Category</h2>
         <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-
-        @foreach($category as $key => $value)
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordian" href="">
-                            <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            {{ $value->name }}
-                        </a>
-                    </h4>
+            @foreach($category as $key => $value)
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordian" href="">
+                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                {{ $value->name }}
+                            </a>
+                        </h4>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
         </div><!--/category-products-->
-    
-        <div class="brands_products"><!--brands_products-->
-            
-            <h2>Brands</h2>
-            <div class="brands-name">
-                @foreach($brand as $key => $value)
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="#">{{ $value -> name }}</a></li>
-                </ul>
-                @endforeach
-            </div>
-                
-        </div><!--/brands_products-->
+
+        <h2>Brands</h2>
+        <div class="panel-group category-products" id="accordian"><!--brand-productsr-->
+            @foreach($brand as $key => $value)
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordian" href="">
+                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                {{ $value->name }}
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            @endforeach
+        </div><!--/brand-products-->
         
         <div class="price-range"><!--price-range-->
             <h2>Price Range</h2>
